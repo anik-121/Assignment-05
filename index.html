@@ -112,3 +112,39 @@
     </div>
   </main>
 </section>
+
+<section id="dashboardPage" class="hidden min-h-screen bg-gray-50">
+
+  <!-- Navbar -->
+  <nav class="bg-[#ffffffFF] border-b border-[#e9e9e9FF] px-6 py-3 flex items-center justify-between sticky top-0 z-40">
+    <div class="flex items-center gap-3">
+      <span class="w-8 h-8">
+        <img src="./assets/github-logo.png" alt="">
+      </span>
+      <span class="text-[#1f2937FF] font-semibold text-xl">GitHub Issues Tracker</span>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <!-- Search -->
+      <div class="relative hidden sm:block">
+        <!-- <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"
+          fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg> -->
+        <input id="searchInput" type="text" placeholder="Search issues..."
+          class="bg-white/10 text-white placeholder-gray-400 text-sm pl-9 pr-4 py-2 rounded-lg border border-white/20 w-52"
+          oninput="handleSearch(this.value)" />
+      </div>
+      <!-- New Issue -->
+      <button onclick="document.getElementById('newIssueModal').showModal()"
+        class="flex items-center gap-1 bg-[#4a00ff] hover:bg-[#3800cc] text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors">
+        <span class="text-lg font-bold leading-none">+</span> New Issue
+      </button>
+    </div>
+  </nav>
+
+
+  <script src="script.js"></script>
+</body>
+</html>
