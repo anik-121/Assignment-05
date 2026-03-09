@@ -1,18 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GitHub Issues Tracker</title>
 
-    <!-- Tailwind and DaisyUi -->
-     <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
-<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet" />
 
-    <link rel="stylesheet" href="style.css">
+  <style>
+    * { font-family: "Geist", sans-serif; }
 
-</head>
-<body>
+  
+    .issue-card {
+      cursor: pointer;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+    .issue-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(0,0,0,.10);
+    }
+
    
-</body>
-</html>
+    .shimmer {
+      background: linear-gradient(90deg, #f3f3f3 25%, #ebebeb 50%, #f3f3f3 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      border-radius: 12px;
+      height: 175px;
+    }
+    @keyframes shimmer {
+      0%   { background-position: -200% 0; }
+      100% { background-position:  200% 0; }
+    }
+
+    
+    .modal-box { animation: popIn .2s ease; }
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(.95) translateY(10px); }
+      to   { opacity: 1; transform: scale(1)  translateY(0); }
+    }
+
+   
+    .pri-high   { background:#fee2e2; color:#dc2626; }
+    .pri-medium { background:#fef3c7; color:#d97706; }
+    .pri-low    { background:#dcfce7; color:#16a34a; }
+
+    .stat-open   { background:#dcfce7; color:#16a34a; }
+    .stat-closed { background:#fee2e2; color:#dc2626; }
+
+  
+    .lbl-bug         { background:#fee2e2; color:#dc2626; }
+    .lbl-enhancement { background:#e0e7ff; color:#4338ca; }
+    .lbl-help        { background:#dcfce7; color:#16a34a; }
+    .lbl-default     { background:#f3f4f6; color:#6b7280; }
+  </style>
+</head>
+
+<body class="bg-base-200 min-h-screen">
+
+
+<section id="loginPage" class="min-h-screen flex items-center justify-center px-4">
+  <main class="w-full max-w-md">
+    <div class="card bg-white shadow-lg">
+      <div class="card-body">
+
+     
+        <div class="flex flex-col items-center text-center mb-2">
+        <span>
+            <img src="./assets/github-logo.png" alt="">
+        </span>
+          <h2 class="text-xl font-semibold text-gray-800">GitHub Issues Tracker</h2>
+          <p class="text-sm text-gray-500 mt-1">Sign in to manage your issues</p>
+        </div>
+
+      
+        <div class="mt-4">
+          <p class="text-sm font-medium text-gray-700 mb-1">Username</p>
+          <input id="username" type="text" placeholder="Enter Username"
+            class="input input-bordered w-full" />
+          <p class="text-xs text-purple-600 mt-1">Default: admin</p>
+        </div>
+
+      
+        <div class="mt-4">
+          <p class="text-sm font-medium text-gray-700 mb-1">Password</p>
+          <input id="password" type="password" placeholder="Enter Password"
+            class="input input-bordered w-full" />
+          <p class="text-xs text-purple-600 mt-1">Default: admin123</p>
+        </div>
+
+       
+        <p id="loginError" class="hidden text-xs text-red-500 mt-2">Invalid username or password.</p>
+
+       
+        <button id="loginBtn"
+          class="w-full mt-5 py-3 rounded-lg text-white font-medium bg-[#4a00ff] hover:bg-[#3800cc] transition-colors">
+          Sign In
+        </button>
+
+        <div class="divider text-sm text-gray-400">OR</div>
+
+        <div class="bg-base-200 p-4 rounded-lg text-sm text-center">
+          <p class="font-semibold">Demo Credentials:</p>
+          <p>Username: <span class="text-purple-600">admin</span></p>
+          <p>Password: <span class="text-purple-600">admin123</span></p>
+        </div>
+
+      </div>
+    </div>
+  </main>
+</section>
