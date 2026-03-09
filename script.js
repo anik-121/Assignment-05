@@ -114,3 +114,82 @@ function applyTab(issues) {
   if (activeTab === 'all') return issues;
   return issues.filter(i => (i.status || 'open').toLowerCase() === activeTab);
 }
+
+/* ── DETAIL MODAL ──────────────────────────── */
+
+async function openIssue(id) {
+  // Show modal with loading state
+  document.getElementById('modalTitle').textContent       = 'Loading…';
+  document.getElementById('modalDescription').textContent = '';
+  document.getElementById('modalAssignee').textContent    = '';
+  document.getElementById('modalDate').textContent        = '';
+  document.getElementById('modalStatus').textContent      = '';
+  document.getElementById('modalPriority').textContent    = '';
+  document.getElementById('modalLabels').innerHTML        = '';
+  issueModal.showModal();
+
+  try {
+    const res  = await fetch(`${API}/issue/${id}`);
+    const json = await res.json();
+    const iss  = json.data;
+
+    const status   = (iss.status   || 'open').toLowerCase();
+    const priority = (iss.priority || 'low').toLowerCase();
+
+    document.getElementById('modalTitle').textContent       = iss.title || 'Untitled';
+    document.getElementById('modalDescription').textContent = iss.description || 'No description.';
+    document.getElementById('modalAssignee').textContent    = iss.assignee || '—';
+    document.getElementById('modalDate').textContent        =
+      `Opened by ${iss.assignee || 'Unknown'} · ${fmtDate(iss.createdAt || iss.created_at)}`;
+
+    // status badge
+    const sEl = document.getElementById('modalStatus');
+    sEl.textContent = cap(status);
+    sEl.className   = `px-2.5 py-0.5 rounded-full text-xs font-semibold ${status === 'open' ? 'stat-open' : 'stat-closed'}`;
+
+    // priority badge
+    const pEl = document.getElementById('modalPriority');
+    pEl.textContent = cap(priority);
+    pEl.className   = `px-3 py-0.5 rounded-full text-xs font-semibold
+      ${priority === 'high' ? 'pri-high' : priority === 'medium' ? 'pri-medium' : 'pri-low'}`;
+
+    // labels
+    const labels = Array.isArray(iss.labels) ? iss.labels : [];
+    document.getElementById('modalLabels').innerHTML = labelTags(labels);
+
+  } catch(e) {
+    document.getElementById('modalTitle').textContent = 'Failed to load issue.';
+  }
+}
+
+
+/* ── HELPERS ───────────────────────────────── */
+
+function esc(str) {
+  return String(str || '')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function cap(str) {
+  return str ? str.charAt(0).toUpperCase() + str.slice(1) : '';
+}
+
+function fmtDate(d) {
+  if (!d) return '';
+  const dt = new Date(d);
+  return isNaN(dt) ? d : dt.toLocaleDateString('en-US', { month:'numeric', day:'numeric', year:'numeric' });
+}
+
+function labelTags(labels) {
+  if (!labels.length) return '';
+  return labels.slice(0, 3).map(l => {
+    const name = (l?.name || l || '').toString();
+    const n    = name.toLowerCase();
+    const cls  = n.includes('bug')         ? 'lbl-bug'
+               : n.includes('enhancement') ? 'lbl-enhancement'
+               : n.includes('help')        ? 'lbl-help'
+               :                             'lbl-default';
+    return `<span class="px-2 py-0.5 rounded text-[10px] font-semibold uppercase ${cls}">${esc(name)}</span>`;
+  }).join('');
+}
