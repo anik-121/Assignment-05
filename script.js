@@ -5,7 +5,7 @@ let activeTab = 'all';
 let searchTimer = null;
 
 
-/* ── LOGIN ─────────────────────────────────── */
+
 
 document.getElementById('loginBtn').addEventListener('click', login);
 
@@ -27,3 +27,5 @@ function login() {
     err.classList.remove('hidden');
   }
 }
+
+
