@@ -29,13 +29,13 @@ function login() {
 }
 
 
-/* ── LOAD ALL ISSUES ───────────────────────── */
+
 
 async function loadIssues() {
   try {
     const res  = await fetch(`${API}/issues`);
     const json = await res.json();
-    allIssues  = json.data || [];          // API returns { data: [...] }
+    allIssues  = json.data || [];         
     renderIssues(allIssues);
   } catch(e) {
     document.getElementById('issuesGrid').innerHTML =
@@ -44,7 +44,7 @@ async function loadIssues() {
 }
 
 
-/* ── RENDER CARDS ──────────────────────────── */
+
 
 function renderIssues(issues) {
   const filtered = applyTab(issues);
@@ -95,7 +95,6 @@ function renderIssues(issues) {
   }).join('');
 }
 
-/* ── TABS ──────────────────────────────────── */
 
 function switchTab(tab) {
   activeTab = tab;
@@ -105,7 +104,7 @@ function switchTab(tab) {
         ? 'px-5 py-1.5 rounded-full text-sm font-medium bg-[#4a00ff] text-white'
         : 'px-5 py-1.5 rounded-full text-sm font-medium bg-white border border-gray-200 text-gray-600 hover:bg-gray-50';
   });
-  // re-render from last loaded list
+
   const q = document.getElementById('searchInput').value.trim();
   if (q) doSearch(q); else renderIssues(allIssues);
 }
@@ -115,16 +114,22 @@ function applyTab(issues) {
   return issues.filter(i => (i.status || 'open').toLowerCase() === activeTab);
 }
 
-/* ── DETAIL MODAL ──────────────────────────── */
+
 
 async function openIssue(id) {
-  // Show modal with loading state
+  
+
   document.getElementById('modalTitle').textContent       = 'Loading…';
+
   document.getElementById('modalDescription').textContent = '';
+
   document.getElementById('modalAssignee').textContent    = '';
   document.getElementById('modalDate').textContent        = '';
+
   document.getElementById('modalStatus').textContent      = '';
+
   document.getElementById('modalPriority').textContent    = '';
+  
   document.getElementById('modalLabels').innerHTML        = '';
   issueModal.showModal();
 
@@ -138,22 +143,23 @@ async function openIssue(id) {
 
     document.getElementById('modalTitle').textContent       = iss.title || 'Untitled';
     document.getElementById('modalDescription').textContent = iss.description || 'No description.';
+    
     document.getElementById('modalAssignee').textContent    = iss.assignee || '—';
     document.getElementById('modalDate').textContent        =
       `Opened by ${iss.assignee || 'Unknown'} · ${fmtDate(iss.createdAt || iss.created_at)}`;
 
-    // status badge
+    
     const sEl = document.getElementById('modalStatus');
     sEl.textContent = cap(status);
     sEl.className   = `px-2.5 py-0.5 rounded-full text-xs font-semibold ${status === 'open' ? 'stat-open' : 'stat-closed'}`;
 
-    // priority badge
+    
     const pEl = document.getElementById('modalPriority');
     pEl.textContent = cap(priority);
     pEl.className   = `px-3 py-0.5 rounded-full text-xs font-semibold
       ${priority === 'high' ? 'pri-high' : priority === 'medium' ? 'pri-medium' : 'pri-low'}`;
 
-    // labels
+    
     const labels = Array.isArray(iss.labels) ? iss.labels : [];
     document.getElementById('modalLabels').innerHTML = labelTags(labels);
 
@@ -163,7 +169,7 @@ async function openIssue(id) {
 }
 
 
-/* ── HELPERS ───────────────────────────────── */
+
 
 function esc(str) {
   return String(str || '')
